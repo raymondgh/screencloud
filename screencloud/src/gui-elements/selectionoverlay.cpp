@@ -89,7 +89,9 @@ void SelectionOverlay::mouseReleaseEvent(QMouseEvent *event)
     drawingRubberBand = false;
     movingRubberBand = false;
     resizingRubberBand = false;
-    this->repaint();
+    // this->repaint();
+    emit selectionDone(selection, screenshot);
+        this->close();
 }
 void SelectionOverlay::mouseMoveEvent(QMouseEvent *event)
 {
@@ -242,31 +244,31 @@ void SelectionOverlay::mouseMoveEvent(QMouseEvent *event)
     selection = selection.intersected(this->rect());
 }
 
-void SelectionOverlay::keyReleaseEvent(QKeyEvent *event)
-{
-    if(event->matches(QKeySequence::Save) || event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)
-    {
-        emit selectionDone(selection, screenshot);
-        this->close();
-    }else if(event->matches(QKeySequence::Quit) || event->key() == Qt::Key_Escape)
-    {
-        emit selectionCanceled();
-        this->close();
-    }else if(event->key() == Qt::Key_Left || event->key() == Qt::Key_A)
-    {
-        if(QApplication::desktop()->screenCount() > 1)
-        {
-            this->moveToScreen(currentScreenNumber + 1);
-        }
-    }else if(event->key() == Qt::Key_Right || event->key() == Qt::Key_D)
-    {
-        if(QApplication::desktop()->screenCount() > 1)
-        {
-            this->moveToScreen(currentScreenNumber - 1);
-        }
-    }
-    QWidget::keyReleaseEvent(event);
-}
+// void SelectionOverlay::keyReleaseEvent(QKeyEvent *event)
+// {
+//     if(event->matches(QKeySequence::Save) || event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)
+//     {
+//         emit selectionDone(selection, screenshot);
+//         this->close();
+//     }else if(event->matches(QKeySequence::Quit) || event->key() == Qt::Key_Escape)
+//     {
+//         emit selectionCanceled();
+//         this->close();
+//     }else if(event->key() == Qt::Key_Left || event->key() == Qt::Key_A)
+//     {
+//         if(QApplication::desktop()->screenCount() > 1)
+//         {
+//             this->moveToScreen(currentScreenNumber + 1);
+//         }
+//     }else if(event->key() == Qt::Key_Right || event->key() == Qt::Key_D)
+//     {
+//         if(QApplication::desktop()->screenCount() > 1)
+//         {
+//             this->moveToScreen(currentScreenNumber - 1);
+//         }
+//     }
+//     QWidget::keyReleaseEvent(event);
+// }
 
 void SelectionOverlay::checkIfRubberBandOutOfBounds()
 {
